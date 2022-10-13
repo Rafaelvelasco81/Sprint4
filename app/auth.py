@@ -3,7 +3,16 @@ import functools
 from pickle import GET
 import random
 import flask
-import utils
+from  . import utils
+import email #
+import imaplib #
+from email.header import decode_header #
+import webbrowser #
+import os #
+from getpass import getpass #
+import sqlite3
+
+from sqlite3 import Error
 
 from email.message import EmailMessage
 import smtplib
@@ -26,7 +35,7 @@ def activate():
         if request.method =='GET': 
             number = request.args['auth'] 
             
-            db = get_db
+            db = get_db ()
             attempt = db.execute(
                'auth/register.html', (number, utils.U_UNCONFIRMED)
             ).fetchone() #este
@@ -55,9 +64,9 @@ def register():
         if request.method == 'POST':    
             username = request.form['username'] 
             password = request.form['password']
-            email = request.form['email']
+            email = request.form['correo']
             
-            db = get_db
+            db = get_db()
             error = None
 
             if not username:
@@ -273,7 +282,7 @@ def login():
             db = get_db
             error = None
             user = db.execute(
-                'SELECT * FROM user WHERE username = ?', (username,)
+                'SELECT * FROM user WHERE username = username', (username,) #
             ).fetchone()
             
             if not username:
